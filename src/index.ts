@@ -8,7 +8,7 @@ const appName = process.env.APP_NAME;
 const app: Express = express();
 const port = process.env.PORT;
 
-app.get('/service', (req: Request, res: Response) => {
+app.post('/service', (req: Request, res: Response) => {
   //write response at AInetwork
   console.log(req.body);
   res.send('Express + TypeScript Server');
