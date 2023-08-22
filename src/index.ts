@@ -1,11 +1,14 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config();
 const Ain = require('@ainblockchain/ain-js').default
 const ain = new Ain('https://testnet-api.ainetwork.ai', 0);
 const privateKey = process.env.PRIVATE_KEY;
 const appName = process.env.APP_NAME;
 const app: Express = express();
+app.use(cors({ origin: true }));
+app.use(express.json());
 const port = process.env.PORT;
 
 app.post('/service', (req: Request, res: Response) => {
