@@ -10,11 +10,11 @@ const port = process.env.PORT;
 
 app.post('/service', (req: Request, res: Response) => {
   //write response at AInetwork
-  console.log(JSON.stringify(req));
+  console.log(req);
   res.send('Express + TypeScript Server');
 });
 app.post('/deposit', (req: Request, res:Response) => {
-  console.log(JSON.stringify(req));
+  console.log(req);
   //deposit
   res.send('test');
 });
