@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from 'express';
+import NodeCache from 'node-cache';
 import dotenv from 'dotenv';
 dotenv.config();
 const Ain = require('@ainblockchain/ain-js').default
@@ -8,11 +9,46 @@ const appName = process.env.APP_NAME;
 const app: Express = express();
 app.use(express.json());
 const port = process.env.PORT;
-
-app.post('/service', (req: Request, res: Response) => {
-  //write response at AInetwork
-  console.log(req.body);
+const cache = new NodeCache();
+const cacheCheck = (txHash:string)=>{
+  if (cache.get(txHash) && cache.get(txHash) !== 'error') {
+		cache.ttl(txHash, 500);
+		return false;
+	}
+	// if request is first request, set cache 
+	cache.set(txHash, "in_progress", 500);
+  return true;
+}
+app.post('/service', async (req: Request, res: Response) => {
+  cacheCheck(req.body.txHash);
+  const userAddress = req.body.valuePath[3];
+  const requestTimestamp = req.body.valuePath[4];
+  const responsePath = `/apps/${appName}/prompt/${userAddress}/${requestTimestamp}/response`;
   res.send('Express + TypeScript Server');
+  //write response at AInetwork
+  console.log(req.body.txHash);
+  try{
+    await ain.db.ref(responsePath).setValue({
+      value: {
+        status: 'SUCCESS',
+        msg:'response test 1',
+        price: 0.1,
+      },
+      gas_price: 500,
+      nonce: -1
+    })
+  }catch(e) {
+    await ain.db.ref(responsePath).setValue({
+      value: {
+        status: 'FAILED',
+        msg: 'failTest',
+      },
+      gas_price: 500,
+      nonce: -1
+    })
+  }
+
+  cache.set(req.body.txHash, 'done', 500);
 });
 app.post('/deposit', (req: Request, res:Response) => {
   console.log(req.body);
