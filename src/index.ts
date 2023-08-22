@@ -31,7 +31,8 @@ app.post('/service', async (req: Request, res: Response) => {
   const responsePath = `/apps/${appName}/prompt/${userAddress}/${requestTimestamp}/response`;
   res.send('Express + TypeScript Server');
   //write response at AInetwork
-  console.log(req.body.transaction.hash);
+  console.log("txHash",req.body.transaction.hash);
+  console.log("responsePath",responsePath);
   try{
     await ain.db.ref(responsePath).setValue({
       value: {
@@ -52,7 +53,7 @@ app.post('/service', async (req: Request, res: Response) => {
       nonce: -1
     })
   }
-
+  console.log("Done");
   cache.set(req.body.transaction.hash, 'done', 500);
 });
 app.post('/deposit', (req: Request, res:Response) => {
