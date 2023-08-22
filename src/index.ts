@@ -21,7 +21,11 @@ const cacheCheck = (txHash:string)=>{
   return true;
 }
 app.post('/service', async (req: Request, res: Response) => {
-  cacheCheck(req.body.transaction.hash);
+  const isNotDuplicated = cacheCheck(req.body.transaction.hash);
+  if (!isNotDuplicated) {
+    res.send('duplicated');
+    return;
+  }
   const userAddress = req.body.valuePath[3];
   const requestTimestamp = req.body.valuePath[4];
   const responsePath = `/apps/${appName}/prompt/${userAddress}/${requestTimestamp}/response`;
