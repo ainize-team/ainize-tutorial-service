@@ -20,13 +20,13 @@ const cacheCheck = (txHash:string)=>{
   return true;
 }
 app.post('/service', async (req: Request, res: Response) => {
-  cacheCheck(req.body.txHash);
+  cacheCheck(req.body.transaction.hash);
   const userAddress = req.body.valuePath[3];
   const requestTimestamp = req.body.valuePath[4];
   const responsePath = `/apps/${appName}/prompt/${userAddress}/${requestTimestamp}/response`;
   res.send('Express + TypeScript Server');
   //write response at AInetwork
-  console.log(req.body.txHash);
+  console.log(req.body.transaction.hash);
   try{
     await ain.db.ref(responsePath).setValue({
       value: {
@@ -48,7 +48,7 @@ app.post('/service', async (req: Request, res: Response) => {
     })
   }
 
-  cache.set(req.body.txHash, 'done', 500);
+  cache.set(req.body.transaction.hash, 'done', 500);
 });
 app.post('/deposit', (req: Request, res:Response) => {
   console.log(req.body);
