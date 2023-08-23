@@ -73,6 +73,7 @@ export default class Ainize {
       nonce: -1
     })
     //TODO(Woojae): change 0 to actual usage cost
+    await this.changeBalance(req,'DEC', 1);
     await this.writeHistory(req, historyType.USAGE, 1 , requestTimestamp );
   }
 
@@ -80,20 +81,14 @@ export default class Ainize {
     const transferPath = this.util.getTransferPath(req);
     const transferKey = req.body.value;
     const transferValue = (await this.ain.db.ref(transferPath).getValue()).value;
-    const balancePath = await this.util.getBalancePath(req);
-    const result = await this.ain.db.ref(balancePath).incrementValue({
-      value:transferValue,
-      gas_price: 500,
-      nonce: -1
-    });
-    console.log("incvalue result",result);
+    await this.changeBalance(req,'INC', transferValue);
     await this.writeHistory(req, historyType.DEPOSIT, transferValue, transferKey);
   }
 
   writeHistory  = async (req:Request, type: historyType, amount: number, key: string) => {
     const historyPath = await this.util.getHistoryPath(req);
     console.log("historyPath",historyPath);
-    const result = await this.ain.db.ref(historyPath).setValue({
+    await this.ain.db.ref(historyPath).setValue({
       value:{
         type,
         amount,
@@ -103,8 +98,29 @@ export default class Ainize {
       gas_price: 500,
       nonce: -1
     });
-    console.log("history result",result);
   }
+
+  changeBalance = async (req:Request,changeType: string, amount: number) => {
+    const balancePath = this.util.getBalancePath(req);
+    if(changeType === 'INC'){
+      const result = await this.ain.db.ref(balancePath).incrementValue({
+        value:amount,
+        gas_price: 500,
+        nonce: -1
+      });
+      console.log("incvalue result",result);
+    }else {
+      const result = await this.ain.db.ref(balancePath).decrementValue({
+        value:amount,
+        gas_price: 500,
+        nonce: -1
+      });
+      console.log("incvalue result",result);
+    }
+    
+  }
+
+  
 
 
 //middleware
