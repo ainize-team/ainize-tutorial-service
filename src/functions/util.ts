@@ -20,15 +20,6 @@ export default class util {
     return balancePath;
   }
 
-  getTransferPath = (req: Request) => {
-    const appName = this.ainize.appName;
-    const requesterAddress = req.body.auth.addr;
-    const adminAddress = this.ainize.userAddress;
-    const transferKey = req.body.valuePath[4];
-    const transferPath = `/apps/${appName}/transfer/${requesterAddress}/${adminAddress}/${transferKey}`;
-    return transferPath;
-  }
-
   getHistoryPath = (req: Request) => {
     const appName = this.ainize.appName;
     const requesterAddress = req.body.auth.addr;

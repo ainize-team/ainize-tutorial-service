@@ -78,9 +78,8 @@ export default class Ainize {
   }
 
   deposit = async (req:Request) => {
-    const transferPath = this.util.getTransferPath(req);
-    const transferKey = req.body.value;
-    const transferValue = (await this.ain.db.ref(transferPath).getValue()).value;
+    const transferKey = req.body.valuePath[4];
+    const transferValue = req.body.value;
     await this.changeBalance(req,'INC', transferValue);
     await this.writeHistory(req, historyType.DEPOSIT, transferValue, transferKey);
   }
