@@ -16,7 +16,7 @@ export default class util {
 
   getBalancePath = (req: Request) => {
     const requesterAddress = req.body.auth.addr;
-    const balancePath = `/apps/${this.ainize.appName}/balance/${requesterAddress}`;
+    const balancePath = `/apps/${this.ainize.appName}/balance/${requesterAddress}/balance`;
     return balancePath;
   }
 
@@ -24,7 +24,7 @@ export default class util {
     const appName = this.ainize.appName;
     const requesterAddress = req.body.auth.addr;
     const adminAddress = this.ainize.userAddress;
-    const transferKey = req.body.value;
+    const transferKey = req.body.valuePath[4];
     const transferPath = `/apps/${appName}/transfer/${requesterAddress}/${adminAddress}/${transferKey}`;
     return transferPath;
   }
@@ -33,7 +33,7 @@ export default class util {
     const appName = this.ainize.appName;
     const requesterAddress = req.body.auth.addr;
     const timestamp = Date.now();
-    const historyPath = `/apps/${appName}/balance/history/${requesterAddress}/${timestamp}`;
+    const historyPath = `/apps/${appName}/balance/${requesterAddress}/history/${timestamp}`;
     return historyPath;
   }
 }
