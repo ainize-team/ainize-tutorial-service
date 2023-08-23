@@ -81,11 +81,12 @@ export default class Ainize {
     const transferKey = req.body.value;
     const transferValue = (await this.ain.db.ref(transferPath).getValue()).value;
     const balancePath = await this.util.getBalancePath(req);
-    await this.ain.db.ref(balancePath).incrementValue({
+    const result = await this.ain.db.ref(balancePath).incrementValue({
       value:transferValue,
       gas_price: 500,
       nonce: -1
     });
+    console.log("incvalue result",result);
     await this.writeHistory(req, historyType.DEPOSIT, transferValue, transferKey);
   }
 
@@ -96,8 +97,8 @@ export default class Ainize {
       value:{
         type,
         amount,
-        transferKey: type === historyType.DEPOSIT ? key : null,
-        requestTimestamp: type === historyType.USAGE ? key : null,
+        transferKey: type === historyType.DEPOSIT ? key : undefined,
+        requestTimestamp: type === historyType.USAGE ? key : undefined,
       },
       gas_price: 500,
       nonce: -1
