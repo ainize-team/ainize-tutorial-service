@@ -42,6 +42,20 @@ app.post('/deposit', async (req: Request, res:Response) => {
   }
 });
 
+app.post('admin/setTriggerFunction', async (req: Request, res: Response) => {
+  try {
+    const endpoint = req.body.value.endpoint;
+    const functionId = req.body.value.functionId;
+    const actionType = req.body.value.actionType;
+    const path = req.body.value.path;
+    console.log("setTriggerFunction- endpoint",endpoint);
+    await ainize.setTriggerFunction(endpoint, functionId, actionType, path);
+  } catch (e) {
+    console.log('error: ',e);
+    res.send('error');
+  }
+});
+
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

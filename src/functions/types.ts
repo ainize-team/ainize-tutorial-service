@@ -14,5 +14,6 @@ enum historyType {
 enum ActionType {
   SERVICE = 'SERVICE',
   DEPOSIT = 'DEPOSIT',
+  CUSTOM = 'CUSTOM',
 }
 export { ainizeInitalConfig, responseStatus, historyType, ActionType };

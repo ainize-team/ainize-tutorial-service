@@ -2,7 +2,7 @@ import  { NextFunction, Request, Response } from 'express';
 import Ain from '@ainblockchain/ain-js';
 import NodeCache from 'node-cache';
 import util from './util';
-import { ainizeInitalConfig, historyType, responseStatus } from './types';
+import { ActionType, ainizeInitalConfig, historyType, responseStatus } from './types';
 export default class Ainize {
   cache: NodeCache;
   ain: Ain;
@@ -29,22 +29,37 @@ export default class Ainize {
 
 //admin function
 
-  // setTriggerFunction = (path:string, endpoint:string,) => {
-    
-  //   return this.ain.db.ref(`/apps/${appName}/accounts/$userAddress/$timestamp`)
-  //   .setFunction({
-  //     value: {
-  //       '.function': {
-  //         'test-trigger': {
-  //           function_type: 'REST',
-  //           function_url: 'http://echo-bot.ainetwork.ai/trigger',
-  //           function_id: 'test-trigger',
-  //         },
-  //       },
-  //     },
-  //     nonce: -1,
-  //   })
-  // }
+  setTriggerFunction = async ( endpoint:string, functionId: string, action:ActionType,path?:string) => {
+    let triggerPath = '';
+    switch(action){
+      case ActionType.SERVICE:
+        triggerPath = `/apps/${this.appName}/service/${functionId}`;
+        break;
+      case ActionType.DEPOSIT:
+        triggerPath = `/apps/${this.appName}/deposit/${functionId}`;
+        break;
+      case ActionType.CUSTOM:
+        if (!path) {
+          throw new Error('path is required for custom action');
+        }
+        triggerPath = path;
+      default:
+        throw new Error('invalid action type');
+    }
+    await this.ain.db.ref(triggerPath)
+    .setFunction({
+      value: {
+        '.function': {
+          [functionId]: {
+            function_type: 'REST',
+            function_url: endpoint,
+            function_id: functionId,
+          },
+        },
+      },
+      nonce: -1,
+    })
+  }
 
   writeResponse = async (req:Request, status: responseStatus, data: any)=> {
     const requestTimestamp = req.body.valuePath[4];
