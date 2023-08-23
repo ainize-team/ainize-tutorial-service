@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import Ainize from './functions/ainize';
+import { responseStatus } from './functions/types';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const appName = process.env.APP_NAME? process.env.APP_NAME : '';

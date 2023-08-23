@@ -2,6 +2,7 @@ import  { NextFunction, Request, Response } from 'express';
 import Ain from '@ainblockchain/ain-js';
 import NodeCache from 'node-cache';
 import util from './util';
+import { ainizeInitalConfig, historyType, responseStatus } from './types';
 export default class Ainize {
   cache: NodeCache;
   ain: Ain;
