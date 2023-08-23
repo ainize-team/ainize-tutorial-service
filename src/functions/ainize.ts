@@ -76,7 +76,8 @@ export default class Ainize {
 
   writeHistory  = async (req:Request, type: historyType, amount: number, key: string) => {
     const historyPath = await this.util.getHistoryPath(req);
-    await this.ain.db.ref(historyPath).setValue({
+    console.log("historyPath",historyPath);
+    const result = await this.ain.db.ref(historyPath).setValue({
       value:{
         type,
         amount,
@@ -86,6 +87,7 @@ export default class Ainize {
       gas_price: 500,
       nonce: -1
     });
+    console.log("history result",result);
   }
 
 
