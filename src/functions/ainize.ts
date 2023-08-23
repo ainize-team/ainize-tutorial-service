@@ -19,12 +19,31 @@ export default class Ainize {
     this.userPrivateKey = config.userPrivateKey;
     this.userAddress = this.ain.wallet.addAndSetDefaultAccount(config.userPrivateKey);
   }
+//general function
+  createApp = (req:Request) => {
+  
+  }
+
+//user function
+
 //admin function
 
-  setAppName = (req: Request) => {
-    const appName = req.body.valuePath[1];
-    this.appName = appName;
-  }
+  // setTriggerFunction = (path:string, endpoint:string,) => {
+    
+  //   return this.ain.db.ref(`/apps/${appName}/accounts/$userAddress/$timestamp`)
+  //   .setFunction({
+  //     value: {
+  //       '.function': {
+  //         'test-trigger': {
+  //           function_type: 'REST',
+  //           function_url: 'http://echo-bot.ainetwork.ai/trigger',
+  //           function_id: 'test-trigger',
+  //         },
+  //       },
+  //     },
+  //     nonce: -1,
+  //   })
+  // }
 
   writeResponse = async (req:Request, status: responseStatus, data: any)=> {
     const requestTimestamp = req.body.valuePath[4];
@@ -83,4 +102,10 @@ export default class Ainize {
     this.cache.set(txHash, "in_progress", 500);
     next();
   }
+//POC
+setAppName = (req: Request) => {
+  const appName = req.body.valuePath[1];
+  this.appName = appName;
+}
+
 }

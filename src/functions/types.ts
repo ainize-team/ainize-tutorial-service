@@ -11,3 +11,8 @@ enum historyType {
   DEPOSIT = 'DEPOSIT',
   USAGE = 'USAGE',
 }
+enum ActionType {
+  SERVICE = 'SERVICE',
+  DEPOSIT = 'DEPOSIT',
+
+}

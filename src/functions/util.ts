@@ -10,7 +10,7 @@ export default class util {
   getResponsePath = (req: Request) => {
     const requesterAddress = req.body.auth.addr;
     const requestTimestamp = req.body.valuePath[4];
-    const responsePath = `/apps/${this.ainize.appName}/prompt/${requesterAddress}/${requestTimestamp}/response`;
+    const responsePath = `/apps/${this.ainize.appName}/usage/${requesterAddress}/${requestTimestamp}/response`;
     return responsePath;
   }
 
