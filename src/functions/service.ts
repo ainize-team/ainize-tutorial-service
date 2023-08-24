@@ -21,7 +21,7 @@ const callService = async (requestData:any) => {
       },
     },
   );
-    return response.data.choices[0].text.data;
+    return response.data.choices[0].text;
 }
 
 export { callService };
