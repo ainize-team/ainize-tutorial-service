@@ -88,6 +88,7 @@ export default class Ainize {
   calculateAndCheckCost = async (req:Request) => {
     const billingConfig = await this.util.getBillingConfig();
     //TODO(woojae): calculate cost more accurately
+    console.log("value",req.body.value);
     const token = req.body.value.propmt.split(' ').length();
     let amount = token * billingConfig.costPerToken;
     if(amount < billingConfig.minCost){
