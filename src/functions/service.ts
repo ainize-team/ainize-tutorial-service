@@ -26,7 +26,7 @@ const callService = async (requestData:any) => {
     //DO SOMETHING
     return {
         status: 'SUCCESS',
-        data: response.data.choices[0].text,
+        data: response.data.choices[0].text.data,
     };
 }
 
