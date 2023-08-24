@@ -27,4 +27,11 @@ export default class util {
     const historyPath = `/apps/${appName}/balance/${requesterAddress}/history/${timestamp}`;
     return historyPath;
   }
+  getBillingConfig = async () => {
+    const appName = this.ainize.appName;
+    const billingConfigPath = `/apps/${appName}/billingConfig`;
+    const billingConfig = await this.ainize.ain.db.ref(billingConfigPath).getValue();
+    return billingConfig;
+
+  }
 }

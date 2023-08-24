@@ -61,7 +61,7 @@ export default class Ainize {
     })
   }
 
-  writeResponse = async (req:Request, status: responseStatus, data: any)=> {
+  writeResponse = async (req:Request, status: responseStatus, data: any, amount: number)=> {
     const requestTimestamp = req.body.valuePath[4];
     const responsePath = this.util.getResponsePath(req);
     await this.ain.db.ref(responsePath).setValue({
@@ -73,8 +73,10 @@ export default class Ainize {
       nonce: -1
     })
     //TODO(Woojae): change 0 to actual usage cost
-    await this.changeBalance(req,'DEC', 1);
-    await this.writeHistory(req, historyType.USAGE, 1 , requestTimestamp );
+    if(status === responseStatus.SUCCESS){
+      await this.changeBalance(req,'DEC', amount);
+      await this.writeHistory(req, historyType.USAGE, amount , requestTimestamp );
+    }
   }
 
   deposit = async (req:Request) => {
@@ -82,6 +84,22 @@ export default class Ainize {
     const transferValue = req.body.value;
     await this.changeBalance(req,'INC', transferValue);
     await this.writeHistory(req, historyType.DEPOSIT, transferValue, transferKey);
+  }
+  calculateAndCheckCost = async (req:Request) => {
+    const billingConfig = await this.util.getBillingConfig();
+    //TODO(woojae): calculate cost more accurately
+    const token = req.body.value.propmt.split(' ').length();
+    let amount = token * billingConfig.costPerToken;
+    if(amount < billingConfig.minCost){
+      amount = billingConfig.minCost;
+    }else if(amount > billingConfig.maxCost){
+      amount = billingConfig.maxCost;
+    }
+    const balance = await this.ain.db.ref(this.util.getBalancePath(req)).getValue();
+    if(balance< amount) {
+      throw new Error('not enough balance');
+    }
+    return amount;
   }
 
   writeHistory  = async (req:Request, type: historyType, amount: number, key: string) => {

@@ -13,9 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "@ainblockchain/ain-js": "^1.5.0",
+    "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "openai": "^4.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
