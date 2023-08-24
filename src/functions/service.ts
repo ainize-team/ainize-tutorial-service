@@ -4,7 +4,6 @@ const callService = async (requestData:any) => {
   const prompt = requestData.prompt;
   const response = await axios.post(
     "https://api.openai.com/v1/completions",
-    // docs복사 prompt에 내가 한 질문 입력
     {
       model: "text-davinci-003",
       prompt: `${prompt}`,
@@ -15,7 +14,6 @@ const callService = async (requestData:any) => {
       presence_penalty: 0.6,
       stop: [" Human:", " AI:"],
     },
-    // 발급받은 api키 env로 입력
     {
       headers: {
         "Content-Type": "application/json",
@@ -23,11 +21,7 @@ const callService = async (requestData:any) => {
       },
     },
   );
-    //DO SOMETHING
-    return {
-        status: 'SUCCESS',
-        data: response.data.choices[0].text.data,
-    };
+    return response.data.choices[0].text.data;
 }
 
 export { callService };
