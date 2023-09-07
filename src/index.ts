@@ -20,7 +20,7 @@ app.post('/service', async (req: Request, res: Response) => {
   try{
     amount = await ainize.admin.checkCostAndBalance(appName, prompt);
     const responseData = await llmService(prompt);
-    console.log(responseData);
+    console.log(responseData, amount);
     await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
   }catch(e) {
     await ainize.admin.writeResponse(req, amount, 'error', RESPONSE_STATUS.FAIL);
