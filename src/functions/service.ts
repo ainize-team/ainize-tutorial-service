@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const callService = async (requestData:any) => {
-  const prompt = requestData.prompt;
+const llmService = async (prompt: string) => {
   const response = await axios.post(
     "https://api.openai.com/v1/completions",
     {
@@ -24,4 +23,4 @@ const callService = async (requestData:any) => {
     return response.data.choices[0].text;
 }
 
-export { callService };
+export { llmService };
