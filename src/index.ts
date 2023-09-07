@@ -16,6 +16,7 @@ app.post('/service', async (req: Request, res: Response) => {
   console.log("service - txHash",req.body.transaction.hash);
   let amount = 0;
   const prompt = req.body.value.prompt;
+  console.log('default account:', ainize.wallet.getDefaultAccount());
   try{
     amount = await ainize.admin.checkCostAndBalance(appName, prompt);
     const responseData = await llmService(prompt);
