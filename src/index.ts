@@ -32,6 +32,7 @@ app.post('/deposit', async (req: Request, res:Response) => {
   //fop POC use process.env.APP_NAME
   console.log("deposit - txHash",req.body.transaction.hash);
   try{ 
+    console.log(req.body.valuePath);
     await ainize.admin.deposit(req);
   }catch(e) {
     console.log('error: ',e);
