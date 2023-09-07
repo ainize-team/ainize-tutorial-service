@@ -20,6 +20,7 @@ app.post('/service', async (req: Request, res: Response) => {
   try{
     amount = await ainize.admin.checkCostAndBalance(appName, prompt);
     const responseData = await llmService(prompt);
+    console.log(req.body.valuePath);
     await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
   }catch(e) {
     await ainize.admin.writeResponse(req, amount, 'error', RESPONSE_STATUS.FAIL);
@@ -32,7 +33,6 @@ app.post('/deposit', async (req: Request, res:Response) => {
   //fop POC use process.env.APP_NAME
   console.log("deposit - txHash",req.body.transaction.hash);
   try{ 
-    console.log(req.body.valuePath);
     await ainize.admin.deposit(req);
   }catch(e) {
     console.log('error: ',e);
