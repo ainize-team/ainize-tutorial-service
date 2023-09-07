@@ -18,7 +18,7 @@ app.post('/service', async (req: Request, res: Response) => {
   const prompt = req.body.value.prompt;
   console.log('default account:', ainize.wallet.getDefaultAccount());
   try{
-    amount = await ainize.admin.checkCostAndBalance(appName, prompt);
+    amount = await ainize.admin.checkCostAndBalance(appName, prompt, req.body.auth.addr);
     const responseData = await llmService(prompt);
     console.log(responseData, amount);
     await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
