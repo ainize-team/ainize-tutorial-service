@@ -11,25 +11,24 @@ app.use(express.json());
 const port = process.env.PORT;
 const ainize = new Ainize(0, userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
+
 app.post('/service', async (req: Request, res: Response) => {
-  console.log("service - txHash",req.body.transaction.hash);
-  let amount = 0;
-  const prompt = req.body.value.prompt;
-  console.log('default account:', ainize.wallet.getDefaultAddress());
+  const { requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
+  console.log("service requestKey: ", requestKey);
   try{
-    amount = await ainize.app.checkCostAndBalance(appName, prompt, req.body.auth.addr);
-    const responseData = await llmService(prompt);
+    const amount = await ainize.app.checkCostAndBalance(appName, requestData, requesterAddress);
+    const responseData = await llmService(requestData);
     console.log(responseData, amount);
     await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
   }catch(e) {
-    await ainize.admin.writeResponse(req, amount, 'error', RESPONSE_STATUS.FAIL);
+    await ainize.admin.writeResponse(req, 0, 'error', RESPONSE_STATUS.FAIL);
     console.log('error: ',e);
     res.send('error');
   }
 });
 
 app.post('/deposit', async (req: Request, res:Response) => {
-  console.log("deposit - txHash",req.body.transaction.hash);
+  console.log("deposit");
   try{ 
     await ainize.admin.deposit(req);
   }catch(e) {
