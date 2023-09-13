@@ -5,14 +5,13 @@ import { llmService } from './functions/service';
 import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
-const appName = process.env.APP_NAME? process.env.APP_NAME : '';
+const appName = process.env.APP_NAME? process.env.APP_NAME : 'ainize_tutorial_app';
 const app: Express = express();
 app.use(express.json());
 const port = process.env.PORT;
 const ainize = new Ainize(0, userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 app.post('/service', async (req: Request, res: Response) => {
-  //fop POC use process.env.APP_NAME
   console.log("service - txHash",req.body.transaction.hash);
   let amount = 0;
   const prompt = req.body.value.prompt;
@@ -30,7 +29,6 @@ app.post('/service', async (req: Request, res: Response) => {
 });
 
 app.post('/deposit', async (req: Request, res:Response) => {
-  //fop POC use process.env.APP_NAME
   console.log("deposit - txHash",req.body.transaction.hash);
   try{ 
     await ainize.admin.deposit(req);
