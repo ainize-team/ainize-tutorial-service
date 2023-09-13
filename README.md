@@ -1,8 +1,7 @@
 # ainize-tutorial-service
 
 ### ainize service for tutorial. 
-This service provides a response of chatGPT3.5 for Ainize-sdk tutorial. 
-we
+This service provides a response of chatGPT3.5 for Ainize-sdk tutorial. \
 visit ainize-sdk for more information.
 
 ### triggerPath
