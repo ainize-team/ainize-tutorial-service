@@ -13,10 +13,10 @@ const ainize = new Ainize(0, userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
-  const { requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
+  const { serviceName, requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
   console.log("service requestKey: ", requestKey);
   try{
-    const amount = await ainize.app.checkCostAndBalance(appName, requestData, requesterAddress);
+    const amount = await ainize.app.checkCostAndBalance(appName, serviceName, requestData, requesterAddress);
     const responseData = await llmService(requestData);
     console.log(responseData, amount);
     await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
