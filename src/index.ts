@@ -5,7 +5,6 @@ import { llmService } from './functions/service';
 import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
-const appName = process.env.APP_NAME? process.env.APP_NAME : 'ainize_tutorial_app';
 const app: Express = express();
 app.use(express.json());
 const port = process.env.PORT;
@@ -13,7 +12,7 @@ const ainize = new Ainize(0, userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
-  const { serviceName, requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
+  const { appName, serviceName, requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
   console.log("service requestKey: ", requestKey);
   try{
     const amount = await ainize.app.checkCostAndBalance(appName, serviceName, requestData, requesterAddress);
