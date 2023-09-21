@@ -8,19 +8,21 @@ const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
 app.use(express.json());
 const port = process.env.PORT;
-const ainize = new Ainize(0, userPrivateKey);
+const ainize = new Ainize(0);
+ainize.login(userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
-  const { appName, serviceName, requestData, requesterAddress, requestKey } = ainize.admin.getDataFromServiceRequest(req);
+  const { appName, requestData, requesterAddress, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   console.log("service requestKey: ", requestKey);
   try{
-    const amount = await ainize.app.checkCostAndBalance(appName, serviceName, requestData, requesterAddress);
+    const model = await ainize.model(appName);
+    const amount = await model.calculateCost(requestData);
     const responseData = await llmService(requestData);
-    console.log(appName, serviceName, requestData, amount);
-    await ainize.admin.writeResponse(req, amount, responseData, RESPONSE_STATUS.SUCCESS);
+    console.log(appName, requestData, amount);
+    await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
   }catch(e) {
-    await ainize.admin.writeResponse(req, 0, 'error', RESPONSE_STATUS.FAIL);
+    await ainize.internal.handleRequest(req, 0, RESPONSE_STATUS.FAIL,'error');
     console.log('error: ',e);
     res.send('error');
   }
@@ -29,7 +31,8 @@ app.post('/service', async (req: Request, res: Response) => {
 app.post('/deposit', async (req: Request, res:Response) => {
   console.log("deposit");
   try{ 
-    await ainize.admin.deposit(req);
+    const result = await ainize.internal.handleDeposit(req);
+    console.log(result);
   }catch(e) {
     console.log('error: ',e);
     res.send('error');
