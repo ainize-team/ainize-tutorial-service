@@ -1,8 +1,9 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import Ainize from '@ainize-team/ainize-sdk'
-import { llmService } from './functions/service';
 import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
+import { exec } from 'child_process';
+import { checkParams, paramStringify } from './functions/service';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
@@ -14,16 +15,27 @@ app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
   const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
-  console.log("service requestKey: ", requestKey);
-  try{
+  const value = req.body;
+  if (!checkParams(req.body.value)) throw Error("Invalid parameters");
+  const paramString = paramStringify(value);
+  
+  try {
     const service = await ainize.getService(appName);
     const amount = await service.calculateCost(requestData);
-    const responseData = await llmService(requestData);
+    let responseData: string = '';
+    const cp = exec(`sh ./docker_run.sh "python main.py ${paramString}"`, (error, stdout, stderr) => {
+      // TODO(yoojin): Need to set responseData
+      responseData = stdout;
+      if (error !== null) {
+        console.log(`exec error: ${error}`);
+        throw Error(error.message);
+      }
+    })
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
-  }catch(e) {
+  } catch(e) {
     await ainize.internal.handleRequest(req, 0, RESPONSE_STATUS.FAIL,'error');
-    console.log('error: ',e);
+    console.log('error: ', e);
     res.send('error');
   }
 });
