@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Ainize from '@ainize-team/ainize-sdk'
 import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
 import { exec } from 'child_process';
-import { checkParams, paramStringify } from './functions/service';
+import { checkParams, paramStringify, evaluate } from './functions/service';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
@@ -23,14 +23,16 @@ app.post('/service', async (req: Request, res: Response) => {
     const service = await ainize.getService(appName);
     const amount = await service.calculateCost(requestData);
     let responseData: string = '';
-    const cp = exec(`sh ./docker_run.sh "python main.py ${paramString}"`, (error, stdout, stderr) => {
-      // TODO(yoojin): Need to set responseData
-      responseData = stdout;
-      if (error !== null) {
-        console.log(`exec error: ${error}`);
-        throw Error(error.message);
-      }
-    })
+    
+    // const cp = exec(`sh ./docker_run.sh "python main.py ${paramString}"`, (error, stdout, stderr) => {
+    //   // TODO(yoojin): Need to set responseData
+    //   responseData = stdout;
+    //   if (error !== null) {
+    //     console.log(`exec error: ${error}`);
+    //     throw Error(error.message);
+    //   }
+    // })
+    await evaluate(value);
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
   } catch(e) {

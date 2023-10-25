@@ -14,6 +14,7 @@
   "dependencies": {
     "@ainblockchain/ain-js": "^1.5.0",
     "@ainize-team/ainize-sdk": "^0.0.1-beta.20",
+    "@kubernetes/client-node": "^0.19.0",
     "axios": "^1.4.0",
     "child_process": "^1.0.2",
     "dotenv": "^16.3.1",
