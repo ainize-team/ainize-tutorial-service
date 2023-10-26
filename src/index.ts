@@ -32,7 +32,7 @@ app.post('/service', async (req: Request, res: Response) => {
     //     throw Error(error.message);
     //   }
     // })
-    await evaluate(value);
+    responseData = await evaluate(value);
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
   } catch(e) {

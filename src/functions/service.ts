@@ -16,8 +16,9 @@ const evaluate = async (value: any) => {
   try {
     const podsRes = await k8sApi.listNamespacedPod('default');
     console.log(podsRes.body);
+    return podsRes.body;
   } catch (err) {
-      console.error(err);
+    console.error(err);
   }
 }
 
