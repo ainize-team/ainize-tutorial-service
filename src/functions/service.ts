@@ -45,6 +45,7 @@ const evaluate = async (value: any) => {
         created.push(response.body);
     }
   }
+  console.log(created);
   return JSON.stringify(created);
 }
 
