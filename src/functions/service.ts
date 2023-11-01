@@ -39,10 +39,12 @@ const evaluate = async (value: any) => {
         // See: https://github.com/kubernetes/kubernetes/issues/97423
         const response = await client.patch(spec);
         created.push(response.body);
+        return response.body;
     } catch (e) {
         // we did not get the resource, so it does not exist, so create it
         const response = await client.create(spec);
         created.push(response.body);
+        return response.body;
     }
 }
 }
