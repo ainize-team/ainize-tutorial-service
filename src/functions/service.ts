@@ -11,12 +11,12 @@ const checkParams = (value: any) => {
 
 const evaluate = async (value: any) => {
   const kc = new k8s.KubeConfig();
-  kc.loadFromDefault();
+  kc.loadFromFile('/home/ubuntu/ainize-tutorial-service/.kubeconfig');
   const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
   try {
     const podsRes = await k8sApi.listNamespacedPod('default');
-    console.log(podsRes.body);
-    return podsRes.body;
+    console.log(podsRes.body.items.length);
+    return podsRes.body.items.length;
   } catch (err) {
     console.error(err);
   }
