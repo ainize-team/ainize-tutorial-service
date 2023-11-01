@@ -16,8 +16,8 @@ app.use(ainize.middleware.triggerDuplicateFilter);
 app.post('/service', async (req: Request, res: Response) => {
   const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   const value = req.body;
-  if (!checkParams(req.body.value)) throw Error("Invalid parameters");
-  const paramString = paramStringify(value);
+  // if (!checkParams(req.body.value)) throw Error("Invalid parameters");
+  // const paramString = paramStringify(value);
   
   try {
     const service = await ainize.getService(appName);
