@@ -15,7 +15,6 @@ app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
   const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
-  const value = req.body;
   // if (!checkParams(req.body.value)) throw Error("Invalid parameters");
   // const paramString = paramStringify(value);
   
@@ -32,7 +31,7 @@ app.post('/service', async (req: Request, res: Response) => {
     //     throw Error(error.message);
     //   }
     // })
-    responseData = await evaluate(value);
+    responseData = await evaluate(requestData);
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
   } catch(e) {
