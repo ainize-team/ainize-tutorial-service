@@ -20,7 +20,7 @@ app.post('/service', async (req: Request, res: Response) => {
   
   try {
     const service = await ainize.getService(appName);
-    const amount = await service.calculateCost(requestData);
+    const amount = await service.calculateCost(requestData.prompt || '');
     let responseData: string = '';
     
     // const cp = exec(`sh ./docker_run.sh "python main.py ${paramString}"`, (error, stdout, stderr) => {
