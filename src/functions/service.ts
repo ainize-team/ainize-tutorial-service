@@ -15,11 +15,11 @@ const evaluate = async (value: any) => {
   const kc = new k8s.KubeConfig();
   kc.loadFromFile('/home/ubuntu/ainize-tutorial-service/.kubeconfig');
   const client = k8s.KubernetesObjectApi.makeApiClient(kc);
-  const specString = await fs.readFile('/home/ubuntu/ainize-tutorial-service/deployment.yaml', 'utf8');
+  let specString = await fs.readFile('/home/ubuntu/ainize-tutorial-service/deployment.yaml', 'utf8');
   console.log("input:", value.prompt);
-  specString.replace('\$(MODEL)', value.prompt.model);
-  specString.replace('\$(MODEL_ARGS)', value.promt.model_args);
-  specString.replace('\$(TASKS)', value.prompt.tasks);
+  specString = specString.replace(/\$\(MODEL\)/g, value.prompt.model);
+  specString = specString.replace(/\$\(MODEL_ARGS\)/g, value.prompt.model_args);
+  specString = specString.replace(/\$\(TASKS\)/g, value.prompt.tasks);
   console.log(specString);
   const specs: k8s.KubernetesObject[] = yaml.loadAll(specString) as k8s.KubernetesObject[];
   const validSpecs = specs.filter((s) => s && s.kind && s.metadata);
