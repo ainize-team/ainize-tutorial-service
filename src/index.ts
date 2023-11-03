@@ -12,7 +12,6 @@ app.use(express.json());
 const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
-app.use(ainize.middleware.triggerDuplicateFilter);
 const queue = new Queue();
 app.post('/result', async (req: Request, res: Response) => {
   const responseData = req.body;
@@ -21,6 +20,7 @@ app.post('/result', async (req: Request, res: Response) => {
 });
 
 app.post('/service', async (req: Request, res: Response) => {
+  ainize.middleware.triggerFilter(req, res);
   const { requesterAddress, appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   // if (!checkParams(req.body.value)) throw Error("Invalid parameters");
   // const paramString = paramStringify(value);
@@ -46,6 +46,7 @@ app.post('/service', async (req: Request, res: Response) => {
 });
 
 app.post('/deposit', async (req: Request, res:Response) => {
+  ainize.middleware.triggerFilter(req, res);
   console.log("deposit");
   try{ 
     const result = await ainize.internal.handleDeposit(req);
