@@ -4,6 +4,7 @@ import Ainize from '@ainize-team/ainize-sdk'
 import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
 import { exec } from 'child_process';
 import { checkParams, paramStringify, evaluate } from './functions/service';
+import Queue from './queue';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
@@ -12,16 +13,21 @@ const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
+const queue = new Queue();
+app.post('/result', async (req: Request, res: Response) => {
+  const responseData = req.body;
+  const data = queue.finish();
+  await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData);
+});
 
 app.post('/service', async (req: Request, res: Response) => {
-  const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
+  const { requesterAddress, appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   // if (!checkParams(req.body.value)) throw Error("Invalid parameters");
   // const paramString = paramStringify(value);
-  
   try {
     const service = await ainize.getService(appName);
     const amount = await service.calculateCost('');
-    let responseData: string = '';
+    queue.push({req,requestKey, requestData, appName, requesterAddress, amount});
     
     // const cp = exec(`sh ./docker_run.sh "python main.py ${paramString}"`, (error, stdout, stderr) => {
     //   // TODO(yoojin): Need to set responseData
@@ -31,9 +37,7 @@ app.post('/service', async (req: Request, res: Response) => {
     //     throw Error(error.message);
     //   }
     // })
-    responseData = await evaluate(requestData);
-    console.log(appName, requestData, amount);
-    await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
+
   } catch(e) {
     await ainize.internal.handleRequest(req, 0, RESPONSE_STATUS.FAIL,'error');
     console.log('error: ', e);
