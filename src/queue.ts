@@ -27,13 +27,13 @@ export default class Queue {
         return this.queue.length;
     }
     finish() {
-      console.log(this.queue);
-
-        const data = this.queue.shift()!;
-        if(this.size() > 0) {
-           this.run();
-        }
-        return data;
+      const data = this.queue.shift()!;
+      console.log("queue: ",this.queue);
+      console.log("queue size:", this.size());
+      if(this.size() > 0) {
+        this.run();
+      }
+      return data;
     }
 
     run() {
