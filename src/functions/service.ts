@@ -20,6 +20,7 @@ const evaluate = async (value: any) => {
   specString = specString.replace(/\$\(MODEL\)/g, value.prompt.model);
   specString = specString.replace(/\$\(MODEL_ARGS\)/g, value.prompt.model_args);
   specString = specString.replace(/\$\(TASKS\)/g, value.prompt.tasks);
+  specString = specString.replace(/\$\(REQUEST_KEY\)/g, value.prompt.request_key);
   console.log(specString);
   const specs: k8s.KubernetesObject[] = yaml.loadAll(specString) as k8s.KubernetesObject[];
   const validSpecs = specs.filter((s) => s && s.kind && s.metadata);

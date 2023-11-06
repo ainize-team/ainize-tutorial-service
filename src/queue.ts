@@ -28,6 +28,7 @@ export default class Queue {
     }
     finish() {
       console.log(this.queue);
+
         const data = this.queue.shift()!;
         if(this.size() > 0) {
            this.run();
@@ -36,8 +37,13 @@ export default class Queue {
     }
 
     run() {
-      const { requestData, appName, amount } = this.queue[0];
-      evaluate(requestData);
+      const { requestKey, requestData, appName, amount } = this.queue[0];
+      try{
+        requestData.request_key = requestKey;
+        evaluate(requestData);
+      } catch(e) {
+        console.log('error: ',e);
+      }
       console.log(appName, requestData, amount);
     }
     
