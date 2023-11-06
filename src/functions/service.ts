@@ -46,9 +46,12 @@ const evaluate = async (value: any) => {
         const response = await client.patch(spec);
         created.push(response.body);
     } catch (e) {
+      try {
         // we did not get the resource, so it does not exist, so create it
         const response = await client.create(spec);
         created.push(response.body);
+      } catch (e) {
+        console.log('error: service:54');
     }
   }
   console.log(created);
