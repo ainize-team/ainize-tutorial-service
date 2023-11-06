@@ -13,7 +13,7 @@ const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 const queue = new Queue();
-app.post('/result', async (req: Request, res: Response) => {
+app.post('/response', async (req: Request, res: Response) => {
   const responseData = req.body;
   const data = queue.finish();
   await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData);
