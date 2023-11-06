@@ -40,7 +40,7 @@ app.post('/service', async (req: Request, res: Response) => {
 
   } catch(e) {
     await ainize.internal.handleRequest(req, 0, RESPONSE_STATUS.FAIL,'error');
-    console.log('error: ', e.message);
+    console.log('error: index:43');
     res.send('error');
   }
 });
