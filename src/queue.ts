@@ -16,6 +16,7 @@ export default class Queue {
     }
     push(data:QueueData) {
         this.queue.push(data);
+        console.log('pushed!: ', data.requestKey)
         if(this.size() === 1) {
           this.run();
         }

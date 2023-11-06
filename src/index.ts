@@ -20,6 +20,7 @@ app.post('/response', async (req: Request, res: Response) => {
 });
 
 app.post('/service', async (req: Request, res: Response) => {
+  console.log('service');
   ainize.middleware.triggerFilter(req, res);
   const { requesterAddress, appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   // if (!checkParams(req.body.value)) throw Error("Invalid parameters");
