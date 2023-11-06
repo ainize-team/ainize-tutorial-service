@@ -27,6 +27,7 @@ export default class Queue {
         return this.queue.length;
     }
     finish() {
+      console.log(this.queue);
         const data = this.queue.shift()!;
         if(this.size() > 0) {
            this.run();
