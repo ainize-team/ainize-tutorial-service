@@ -42,7 +42,7 @@ export default class Queue {
         requestData.prompt.request_key = requestKey;
         evaluate(requestData);
       } catch(e) {
-        console.log('error: ',e);
+        console.log('error: ');
       }
       console.log(appName, requestData, amount);
     }
