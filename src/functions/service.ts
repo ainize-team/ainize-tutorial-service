@@ -52,6 +52,7 @@ const evaluate = async (value: any) => {
         created.push(response.body);
       } catch (e) {
         console.log('error: service:54');
+      }
     }
   }
   console.log(created);
