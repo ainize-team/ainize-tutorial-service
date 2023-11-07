@@ -15,6 +15,7 @@ const queue = new Queue();
 app.post('/response', async (req: Request, res: Response) => {
   const responseData = req.body;
   const data = queue.finish();
+  console.log('responseData:', responseData);
   await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData);
 });
 
