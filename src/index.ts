@@ -13,7 +13,7 @@ ainize.login(userPrivateKey);
 const queue = new Queue();
 
 app.post('/response', async (req: Request, res: Response) => {
-  const responseData = req.body;
+  const responseData = req.body.results;
   const data = queue.finish();
   console.log('data: ', data);
   console.log('responseData:', responseData);
