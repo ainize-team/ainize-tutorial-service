@@ -2,6 +2,7 @@ import * as yaml from 'js-yaml';
 import { promises as fs } from 'fs';
 import * as k8s from '@kubernetes/client-node';
 const checkParams = (value: any) => {
+  console.log('value:', value);
   if (typeof value !== 'object') return false;
   // FIXME(yoojin): check required params and fix.
   // Required params.
