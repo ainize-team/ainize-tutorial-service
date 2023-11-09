@@ -50,7 +50,7 @@ const evaluate = async (value: any) => {
         const response = await client.create(spec);
         created.push(response.body);
       } catch (e) {
-        console.log('error: service:54');
+        console.log('error: ', e);
       }
     }
   }
