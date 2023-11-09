@@ -1,32 +1,34 @@
+import { request } from "@ainize-team/ainize-sdk/dist/types/type";
 import { evaluate } from "./functions/service";
 import { Request } from 'express';
-type QueueData = {
+
+type QueueData = request & {
     req: Request;
-    requestKey: string;
-    appName: string;
-    requestData: any;
-    requesterAddress: string;
     amount: number;
-}
+};
 
 export default class Queue {
     queue: Array<QueueData>;
     constructor() {
         this.queue = new Array();
     }
-    push(data:QueueData) {
+
+    push(data: QueueData) {
         this.queue.push(data);
         console.log('pushed!: ', data.requestKey)
         if(this.size() === 1) {
           this.run();
         }
     }
+
     shift() {
         return this.queue.shift();
     }
+
     size() {
         return this.queue.length;
     }
+
     finish() {
       console.log("queue: ",this.queue);
       console.log("queue size:", this.size());
@@ -39,8 +41,8 @@ export default class Queue {
 
     run() {
       const { requestKey, requestData, appName, amount } = this.queue[0];
-      try{
-        requestData.prompt.request_key = requestKey;
+      try {
+        requestData.request_key = requestKey;
         evaluate(requestData);
       } catch(e) {
         console.log('error: ');
