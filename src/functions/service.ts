@@ -53,7 +53,7 @@ const evaluate = async (value: any) => {
       }
     }
   }
-  console.log(created);
+  console.log('created');
   return JSON.stringify(created);
 }
 
