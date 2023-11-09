@@ -20,7 +20,6 @@ const evaluate = async (value: any) => {
   console.log("input:", value);
   specString = specString.replace(/\$\(REQUEST_KEY\)/g, value.request_key);
   specString = specString.replace(/\$\(PARAMS\)/g, paramString);
-  console.log(specString);
   const specs: k8s.KubernetesObject[] = yaml.loadAll(specString) as k8s.KubernetesObject[];
   const validSpecs = specs.filter((s) => s && s.kind && s.metadata);
   const created: k8s.KubernetesObject[] = [];

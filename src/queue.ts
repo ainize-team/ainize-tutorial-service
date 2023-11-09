@@ -30,9 +30,9 @@ export default class Queue {
     }
 
     finish() {
-      console.log("queue: ",this.queue);
-      console.log("queue size:", this.size());
+      console.log("before queue size:", this.size());
       const data = this.queue.shift()!;
+      console.log("shifted data:", data);
       if(this.size() > 0) {
         this.run();
       }
@@ -43,11 +43,11 @@ export default class Queue {
       const { requestKey, requestData, appName, amount } = this.queue[0];
       try {
         requestData.request_key = requestKey;
+        console.log('run: ', requestKey);
         evaluate(requestData);
       } catch(e) {
         console.log('error: ');
       }
-      console.log(appName, requestData, amount);
     }
     
 }
