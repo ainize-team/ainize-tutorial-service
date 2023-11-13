@@ -20,8 +20,8 @@ app.post('/response', async (req: Request, res: Response) => {
     console.log('responseData:', responseData.error);
     await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.FAIL, responseData);
   } else {
-    console.log('responseData:', responseData.result);
-    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData.result);
+    console.log('responseData:', responseData);
+    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData);
   }
 });
 
