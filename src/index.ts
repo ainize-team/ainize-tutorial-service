@@ -14,14 +14,14 @@ ainize.login(userPrivateKey);
 const queue = new Queue();
 
 app.post('/response', async (req: Request, res: Response) => {
-  const responseData = req.body.responseData;
+  const responseData = req.body;
   const data = queue.finish();
-  if(responseData.error) {
-    console.log('responseData:', responseData.error);
-    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.FAIL, responseData);
+  if(responseData.results) {
+    console.log('responseData:', responseData.results);
+    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData.results);
   } else {
-    console.log('responseData:', responseData.result);
-    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData.result);
+    console.log('responseData:', responseData);
+    await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.FAIL, responseData);
   }
 });
 
