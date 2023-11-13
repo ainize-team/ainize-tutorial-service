@@ -32,7 +32,7 @@ export default class Queue {
     finish() {
       console.log("before queue size:", this.size());
       const data = this.queue.shift()!;
-      console.log("shifted data:", data);
+      console.log("shifted data:", data.requestKey);
       if(this.size() > 0) {
         this.run();
       }
