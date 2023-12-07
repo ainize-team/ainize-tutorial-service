@@ -12,13 +12,15 @@ const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 const queue = new Queue();
-let count = 0;
+
 app.post('/response', async (req: Request, res: Response) => {
-  console.log('count :>> ', ++count);
   const responseData = req.body;
-  const data = queue.finish();
-  if (!data) {
-    return res.send("Queue is empty.");
+  let data = null;
+  try {
+    data = queue.finish();
+  } catch (e) {
+    console.log("Queue error > ", e);
+    return res.send("Response failed.");
   }
   if(responseData.results) {
     console.log('responseData:', responseData.results);

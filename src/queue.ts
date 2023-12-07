@@ -31,11 +31,11 @@ export default class Queue {
 
     finish() {
       console.log("before queue size:", this.size());
-      if (this.size() === 0) {
-        return null;
+      const data = this.queue.shift();
+      if (!data) {
+        throw Error("Queue is empty.");
       }
-      const data = this.queue.shift()!;
-      console.log("shifted data:", data);
+      console.log("shifted data:", data.requestKey);
       if(this.size() > 0) {
         this.run();
       }
