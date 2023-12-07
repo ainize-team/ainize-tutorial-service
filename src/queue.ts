@@ -31,6 +31,9 @@ export default class Queue {
 
     finish() {
       console.log("before queue size:", this.size());
+      if (this.size() > 0) {
+        return null;
+      }
       const data = this.queue.shift()!;
       console.log("shifted data:", data);
       if(this.size() > 0) {

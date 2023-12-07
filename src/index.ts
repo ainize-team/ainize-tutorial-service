@@ -16,14 +16,17 @@ const queue = new Queue();
 app.post('/response', async (req: Request, res: Response) => {
   const responseData = req.body;
   const data = queue.finish();
+  if (!data) {
+    return res.send("Queue is empty.");
+  }
   if(responseData.results) {
     console.log('responseData:', responseData.results);
     await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData.results);
-    res.send("Response success.");
+    return res.send("Response success.");
   } else {
     console.log('responseData:', responseData);
     await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.FAIL, responseData);
-    res.send("Response failed.");
+    return res.send("Response failed.");
   }
 });
 
