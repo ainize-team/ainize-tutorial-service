@@ -12,8 +12,9 @@ const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 const queue = new Queue();
-
+let count = 0;
 app.post('/response', async (req: Request, res: Response) => {
+  console.log('count :>> ', ++count);
   const responseData = req.body;
   const data = queue.finish();
   if (!data) {
