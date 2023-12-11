@@ -75,7 +75,7 @@ const paramStringify = (value: any) => {
   `${value.check_integrity ? `, "--check_integrity", "${value.check_integrity}"` : '' }` +
   `${value.write_out ? `, "--write_out", "${value.write_out}"` : '' }` +
   `${value.output_base_path ? `, "--output_base_path", "${value.output_base_path}"` : '' }` + 
-  `--max_cpu_memory 512`;
+  `, "--max_cpu_memory 512"`;
   return paramString;
 };
 
