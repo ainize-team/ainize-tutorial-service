@@ -15,13 +15,21 @@ const queue = new Queue();
 
 app.post('/response', async (req: Request, res: Response) => {
   const responseData = req.body;
-  const data = queue.finish();
+  let data = null;
+  try {
+    data = queue.finish();
+  } catch (e) {
+    console.log("Queue error > ", e);
+    return res.send("Response failed.");
+  }
   if(responseData.results) {
     console.log('responseData:', responseData.results);
     await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.SUCCESS, responseData.results);
+    return res.send("Response success.");
   } else {
     console.log('responseData:', responseData);
     await ainize.internal.handleRequest(data.req, data.amount, RESPONSE_STATUS.FAIL, responseData);
+    return res.send("Response failed.");
   }
 });
 

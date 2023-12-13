@@ -31,7 +31,10 @@ export default class Queue {
 
     finish() {
       console.log("before queue size:", this.size());
-      const data = this.queue.shift()!;
+      const data = this.queue.shift();
+      if (!data) {
+        throw Error("Queue is empty.");
+      }
       console.log("shifted data:", data.requestKey);
       if(this.size() > 0) {
         this.run();
