@@ -60,7 +60,7 @@ const evaluate = async (value: any) => {
 const paramStringify = (value: any) => {
   const paramString = 
   `${value.model ? `"--model", "${value.model}"` : '' }` +
-  `${value.model_args ? `, "--model_args", "${value.model_args}",parallelize=True,` : '' }` +
+  `${value.model_args ? `, "--model_args", "${value.model_args}"` : '' }` +
   `${value.tasks ? `, "--tasks", "${value.tasks}"` : '' }` +
   `${value.num_fewshot ? `, "--num_fewshot", "${value.num_fewshot}"` : '' }` +
   `${value.batch_size ? `, "--batch_size", "${value.batch_size}"` : '' }` +
