@@ -1,4 +1,4 @@
-import { request } from "@ainize-team/ainize-sdk/dist/types/type";
+import { request } from "@ainize-team/ainize-js/dist/types/type";
 import { evaluate } from "./functions/service";
 import { Request } from 'express';
 

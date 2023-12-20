@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import Ainize from '@ainize-team/ainize-sdk'
-import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
+import Ainize from '@ainize-team/ainize-js'
+import { RESPONSE_STATUS } from '@ainize-team/ainize-js/dist/types/type';
 import { checkParams } from './functions/service';
 import Queue from './queue';
 dotenv.config();
