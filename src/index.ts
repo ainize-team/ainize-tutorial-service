@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import Ainize from '@ainize-team/ainize-js'
+import _ from "lodash";
 const Ain = require('@ainblockchain/ain-js').default
 import { llmService } from './functions/service';
 import { RESPONSE_STATUS } from '@ainize-team/ainize-js/dist/types/type';
@@ -14,13 +15,20 @@ const ain = new Ain('https://testnet-api.ainetwork.ai', 0);
 ainize.login(userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
-app.post('/service', async (req: Request, res: Response) => {
+const testFilter = async (req: Request, res: Response, next: any) => {
   const { appName, requestData, requestKey,requesterAddress } = ainize.internal.getDataFromServiceRequest(req);
   const result = ain.db.ref(`/apps/${appName}/service/${requesterAddress}/${requestKey}/request`).getValue();
   console.log(`result: ${JSON.stringify(await result)}`);
   console.log(`requestData: ${JSON.stringify(requestData)}`);
   console.log(`result === requestData: ${result === requestData}`);
   console.log("service requestKey: ", requestKey);
+  _.isEqual(result, requestData) ? res.send('error') : next();
+}
+
+app.post('/service', 
+  testFilter,
+  async (req: Request, res: Response) => {
+  const { appName, requestData, requestKey,requesterAddress } = ainize.internal.getDataFromServiceRequest(req);
   try{
     const service = await ainize.getService(appName);
     const amount = await service.calculateCost(requestData);
