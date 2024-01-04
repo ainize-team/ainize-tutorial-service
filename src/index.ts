@@ -17,7 +17,7 @@ app.use(ainize.middleware.triggerDuplicateFilter);
 app.post('/service', async (req: Request, res: Response) => {
   const { appName, requestData, requestKey,requesterAddress } = ainize.internal.getDataFromServiceRequest(req);
   const result = ain.db.ref(`/apps/${appName}/service/${requesterAddress}/${requestKey}/request`).getValue();
-  console.log(`result: ${JSON.stringify(result)}`);
+  console.log(`result: ${JSON.stringify(await result)}`);
   console.log(`requestData: ${JSON.stringify(requestData)}`);
   console.log(`result === requestData: ${result === requestData}`);
   console.log("service requestKey: ", requestKey);
