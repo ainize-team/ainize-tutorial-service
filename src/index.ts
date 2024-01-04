@@ -1,19 +1,23 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import Ainize from '@ainize-team/ainize-sdk'
+import Ainize from '@ainize-team/ainize-js'
+const Ain = require('@ainblockchain/ain-js').default
 import { llmService } from './functions/service';
-import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
+import { RESPONSE_STATUS } from '@ainize-team/ainize-js/dist/types/type';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
 app.use(express.json());
 const port = process.env.PORT;
 const ainize = new Ainize(0);
+const ain = new Ain('https://testnet-api.ainetwork.ai', 0);
 ainize.login(userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
 app.post('/service', async (req: Request, res: Response) => {
-  const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
+  const { appName, requestData, requestKey,requesterAddress } = ainize.internal.getDataFromServiceRequest(req);
+  const result = ain.db.ref(`/apps/${appName}/service/${requesterAddress}/${requestKey}/request`).getValue();
+  console.log(`result: ${result}, requestData: ${requestData}`);
   console.log("service requestKey: ", requestKey);
   try{
     const service = await ainize.getService(appName);
