@@ -12,13 +12,15 @@ const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 app.use(ainize.middleware.triggerDuplicateFilter);
 
-app.post('/service', async (req: Request, res: Response) => {
+app.post('/service', 
+  ainize.middleware.triggerDuplicateFilter,
+  async (req: Request, res: Response) => {
   const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
   console.log("service requestKey: ", requestKey);
   try{
     const service = await ainize.getService(appName);
-    const amount = await service.calculateCost(requestData);
     const responseData = await llmService(requestData);
+    const amount = 0.1;
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
   }catch(e) {
@@ -28,7 +30,9 @@ app.post('/service', async (req: Request, res: Response) => {
   }
 });
 
-app.post('/deposit', async (req: Request, res:Response) => {
+app.post('/deposit',
+  ainize.middleware.triggerDuplicateFilter,
+  async (req: Request, res:Response) => {
   console.log("deposit");
   try{ 
     const result = await ainize.internal.handleDeposit(req);
