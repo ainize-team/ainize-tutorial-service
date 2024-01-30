@@ -1,26 +1,16 @@
-import axios from "axios";
+import OpenAI from "openai";
+
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 const llmService = async (prompt: string) => {
-  const response = await axios.post(
-    "https://api.openai.com/v1/completions",
+
+  const response = await openai.chat.completions.create(
     {
-      model: "text-davinci-003",
-      prompt: `${prompt}`,
-      temperature: 0.9,
-      max_tokens: 521,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0.6,
-      stop: [" Human:", " AI:"],
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(process.env.OPENAI_API_KEY),
-      },
-    },
+     messages:[{role: "user", content: prompt}],
+     model: "gpt-3.5-turbo",
+    }
   );
-    return response.data.choices[0].text;
+    return response.choices[0];
 }
 
 export { llmService };
