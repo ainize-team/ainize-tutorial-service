@@ -1,8 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import Ainize from '@ainize-team/ainize-sdk'
+import Ainize from '@ainize-team/ainize-js';
 import { llmService } from './functions/service';
-import { RESPONSE_STATUS } from '@ainize-team/ainize-sdk/dist/types/type';
+import { RESPONSE_STATUS } from '@ainize-team/ainize-js/dist/types/type';
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
