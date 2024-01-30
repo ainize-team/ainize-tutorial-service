@@ -12,10 +12,6 @@ const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
 
 app.post('/service',
-  (request, response, next) => {
-    console.log(request.body);
-    next();
-  },
   ainize.middleware.triggerDuplicateFilter,
   async (req: Request, res: Response) => {
   const { appName, requestData, requestKey } = ainize.internal.getDataFromServiceRequest(req);
