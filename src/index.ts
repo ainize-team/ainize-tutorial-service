@@ -20,7 +20,7 @@ app.post('/service',
   console.log("service requestKey: ", requestKey);
   try{
     const service = await ainize.getService(appName);
-    const responseData = await llmService(openai, requestData);
+    const responseData = await llmService(openai, requestData.prompt);
     const amount = 0.1;
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);
