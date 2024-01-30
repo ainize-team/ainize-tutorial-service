@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import Ainize from '@ainize-team/ainize-js';
 import { llmService } from './functions/service';
 import { RESPONSE_STATUS } from '@ainize-team/ainize-js/dist/types/type';
+import OpenAI from "openai";
 dotenv.config();
 const userPrivateKey = process.env.PRIVATE_KEY? process.env.PRIVATE_KEY : '';
 const app: Express = express();
@@ -10,6 +11,7 @@ app.use(express.json());
 const port = process.env.PORT;
 const ainize = new Ainize(0);
 ainize.login(userPrivateKey);
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 app.post('/service',
   ainize.middleware.triggerDuplicateFilter,
@@ -18,7 +20,7 @@ app.post('/service',
   console.log("service requestKey: ", requestKey);
   try{
     const service = await ainize.getService(appName);
-    const responseData = await llmService(requestData);
+    const responseData = await llmService(openai, requestData);
     const amount = 0.1;
     console.log(appName, requestData, amount);
     await ainize.internal.handleRequest(req, amount, RESPONSE_STATUS.SUCCESS, responseData);

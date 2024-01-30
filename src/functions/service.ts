@@ -1,8 +1,7 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
-const llmService = async (prompt: string) => {
+const llmService = async (openai: OpenAI, prompt: string) => {
 
   const response = await openai.chat.completions.create(
     {
